@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-> 本專案為Next.js 14版的今天吃什麼
+> 本專案為使用Next.js 14製作的今天吃什麼
 
 ## Getting Started
 
