@@ -23,7 +23,7 @@ const Navbar = () => {
                     登入
                 </li>
             </Link>
-            <Link href="/signup">
+            <Link href="/register">
                 <li>
                     註冊
                 </li>
