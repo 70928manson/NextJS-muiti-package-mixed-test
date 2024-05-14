@@ -1,7 +1,8 @@
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prismadb from "@/libs/prismadb";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
+import GithubProvider from "next-auth/providers/github";
 
 export const authOptions: AuthOptions = {
     providers: [
@@ -37,7 +38,37 @@ export const authOptions: AuthOptions = {
 
                 return user;
             }
-        })
+        }),
+        GithubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID as string,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+            token: 'https://github.com/login/oauth/access_token',
+            authorization: {
+                params: {
+                    scope: "repo"
+                }
+            }
+        }),
     ],
-    secret: process.env.NEXTAUTH_SECRET
+    secret: process.env.NEXTAUTH_SECRET,
+    session: {
+        strategy: "jwt"
+    },
+    debug: process.env.NODE_ENV !== "production",
+    
+    // TODO: 第三方登入 OAuth
+    callbacks: {
+        async jwt({ token, account }) {
+            if (account) {
+                token = Object.assign({}, token, { access_token: account.access_token });
+            };
+            return token;
+        },
+        async session({ session, token }) {
+            if (session) {
+                session = Object.assign({}, session, { access_token: token.access_token })
+            };
+            return session;
+        }
+    }
 }
